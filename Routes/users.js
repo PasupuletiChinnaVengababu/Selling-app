@@ -2,7 +2,8 @@ const express=require("express")
 const Router=express.Router
 const mongoose=require("mongoose");
 const { userModels } = require("../db");
-const jwt=require("jsonwebtoken")
+const jwt=require("jsonwebtoken");
+const { Middleware } = require("../middleware/userMiddleware");
 const JWT_SECRET="PCVB"
 const userRouter=Router();
 
@@ -30,6 +31,10 @@ const userRouter=Router();
             res.json(token)
         }
         
+    })
+    userRouter.get("/me",Middleware,(req,res)=>{
+       const id=req.id;
+       res.json(id)
     })
     userRouter.post("/purchase/course",(req,res)=>{
         

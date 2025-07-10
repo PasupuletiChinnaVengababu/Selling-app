@@ -3,7 +3,8 @@ const express=require("express")
 const jwt=require("jsonwebtoken")
 const JWT_SECRET="PCVB"
 const Router=express.Router;
-const { adminModel } = require("../db");
+const { adminModel, courseModel } = require("../db");
+const { Middleware } = require("../middleware/userMiddleware");
 
 const adminRouter=Router();
 
@@ -31,8 +32,35 @@ adminRouter.post("/login",async (req,res)=>{
     }
     
 })
-adminRouter.post("/create/course",(req,res)=>{
+adminRouter.post("/create/course",Middleware, async (req,res)=>{
+    const adminid=req.id;
+    const {title,description,price,imageUrl}=req.body;
+    await courseModel.create({
+        title,
+        description,
+        price,
+        imageUrl,
+        creatorId:adminid
+    })
+    res.json(adminid)
 
+})
+adminRouter.put("/course",Middleware,async (req,res)=>{
+    const adminid=req.id;
+    const {title,description,price,imageUrl,courseId}=req.body;
+    const updated=await courseModel.updateOne({
+        creatorId:adminid,
+        _id:courseId
+    },
+    {
+         title,
+        description,
+        price,
+        imageUrl
+    }
+    )
+    
+    res.json(courseId)
 })
 adminRouter.delete("/course",(req,res)=>{
 

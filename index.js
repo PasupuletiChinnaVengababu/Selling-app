@@ -1,11 +1,12 @@
+require('dotenv').config()
 const express=require("express");
 const mongoose=require("mongoose")
 const { userRouter } = require("./Routes/users");
 const { adminRouter } = require("./Routes/admins");
 
 const app=express();
-mongoose.connect("mongodb+srv://amchinnavengababu:xebuMHvrUlwlV93Z@cluster0.qotcnag.mongodb.net/Selling-app")
-// mongoose.connect('mongodb+srv://amchinnavengababu:qotcnag.mongodb.net/')
+
+mongoose.connect(process.env.Mongo_url)
 //userProfile(app)
 app.use(express.json())
 app.use("/user",userRouter)
