@@ -23,9 +23,11 @@ adminRouter.post("/signup",async (req,res)=>{
 })
 adminRouter.post("/login",async (req,res)=>{
     const email=req.body.email;
+    const password=req.body.password;
     const admin=await adminModel.findOne({email});
     if(admin){
-        res.json("user is already available");
+        const token=jwt.sign({id:admin._id},JWT_SECRET)
+        res.json(token)
     }
     
 })
