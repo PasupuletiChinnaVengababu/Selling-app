@@ -1,7 +1,7 @@
 const express=require("express")
 const Router=express.Router
 const mongoose=require("mongoose");
-const { userModels } = require("../db");
+const { userModels, courseModel, purchaseModel } = require("../db");
 const jwt=require("jsonwebtoken");
 const { Middleware } = require("../middleware/userMiddleware");
 const JWT_SECRET="PCVB"
@@ -32,17 +32,26 @@ const userRouter=Router();
         }
         
     })
-    userRouter.get("/me",Middleware,(req,res)=>{
-       const id=req.id;
-       res.json(id)
+    userRouter.get("/preview",async (req,res)=>{
+       //const id=req.id;
+       const courses=await courseModel.find({})
+       res.json(courses)
     })
-    userRouter.post("/purchase/course",(req,res)=>{
+    userRouter.post("/purchase/course",Middleware,async(req,res)=>{
+        const userId=req.id;
+        const courseId=req.body.courseId;
+        await purchaseModel.create({
+            userId,
+            courseId
+        })
+        res.json("course purchased")
         
     })
-    userRouter.get("/courses",(req,res)=>{
-        res.json({
-            "name":"pcvb"
-        })
+    userRouter.get("/courses",async(req,res)=>{
+        const purchasecourses=await purchaseModel.findOne({})
+        const coursesList=await courseModel.find({})
+        const purchasedcourses=coursesList.find(i=>i._id=="686f9c08dd39500f30d3b5af")
+        res.json({purchasedcourses})
     })
 
 module.exports={

@@ -30,8 +30,10 @@ const purchaseSchema = new Schema({
 const userModels=mongoose.model("User1",userSchema);
 const adminModel=mongoose.model("Admin",adminSchema);
 const courseModel=mongoose.model("Course",courseSchema);
+const purchaseModel=mongoose.model("purchase",purchaseSchema);
 module.exports={
     userModels,
     adminModel,
-    courseModel
+    courseModel,
+    purchaseModel
 }
