@@ -22,10 +22,14 @@ const userRouter=Router();
         res.json("USer Created")
 
     })
-    userRouter.post("/login",(req,res)=>{
+    userRouter.post("/login",async (req,res)=>{
         const{email,password}=req.body;
-        const suser=userModels.findOne({email});
+        console.log(email)
+        console.log(password)
+        const suser=await userModels.findOne({email});
+        console.log(suser)
         if(suser){
+            console.log(suser._id)
             const token=jwt.sign({id:suser._id},JWT_SECRET)
             console.log(token)
             res.json(token)
@@ -39,12 +43,13 @@ const userRouter=Router();
     })
     userRouter.post("/purchase/course",Middleware,async(req,res)=>{
         const userId=req.id;
+        console.log(userId)
         const courseId=req.body.courseId;
         await purchaseModel.create({
             userId,
             courseId
         })
-        res.json("course purchased")
+        res.json(userId)
         
     })
     userRouter.get("/courses",async(req,res)=>{
